@@ -121,10 +121,6 @@ spec:
         - name: creditnote
           image: comd/creditnote:latest
           imagePullPolicy: IfNotPresent
-        #resources:
-        #  requests:
-        #  cpu: 100m
-        #  memory: 100Mi
           env:          
           - name: SAP_RFC_DESTINATION
             value: "AS_ABAP"
@@ -138,8 +134,8 @@ spec:
             value: "amusa"
           - name: JCO_PASSWD
             value: "jfoxuser" 
-          - name: mongodb.url
-            value: "mongodb://mongo-db"
+          - name: mongodb.host
+            value: mongo-db
           - name: mongodb.db
             value: "sequence"            
           ports:
