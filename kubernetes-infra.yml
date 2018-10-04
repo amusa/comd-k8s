@@ -34,23 +34,23 @@ spec:
         image: jboss/keycloak
         env:
         - name: POSTGRES_DB
-		  value: keycloak          
+          value: keycloak
         - name: DB_USER
           value: keycloak
         - name: DB_PASSWORD
           value: password
-		- name: KEYCLOAK_USER
-		  value: admin
-		- name: KEYCLOAK_PASSWORD
-		  value: Pa55w0rd
+        - name: KEYCLOAK_USER
+          value: admin
+        - name: KEYCLOAK_PASSWORD
+          value: Pa55w0rd
         ports:
           - name: http
-            containerPort: 8080          
+            containerPort: 8080
       volumes:
         - name: keycloakdata
           hostPath:
             path: /root/keycloakdata
-			
+
 ---
 
 apiVersion: extensions/v1beta1
@@ -71,9 +71,9 @@ spec:
         - name: POSTGRES_DB
           value: keycloak
         - name: POSTGRES_USER
-		  value: keycloak
-		- name: POSTGRES_PASSWORD
-		  value: password          
+          value: keycloak
+        - name: POSTGRES_PASSWORD
+          value: password
         volumeMounts:
           - mountPath: /var/lib/postgresql/data
             name: postgresdata        
@@ -81,7 +81,6 @@ spec:
         - name: postgresdata
           hostPath:
             path: /root/postgresdata
-			
 ---
 
 apiVersion: extensions/v1beta1
@@ -102,11 +101,11 @@ spec:
           - mountPath: /data/db
             name: mongodbdata  
           - mountPath: /data/configdb
-            name: mongodbconfig 			
+            name: mongodbconfig 
       volumes:
         - name: mongodbdata
           hostPath:
             path: /root/db
-	    - name: mongodbconfig
+        - name: mongodbconfig
           hostPath:
             path: /root/configdb
