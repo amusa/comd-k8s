@@ -67,7 +67,7 @@ metadata:
   name: delivery
   namespace: comd
 spec:  
-  replicas: 1
+  replicas: "1"
   template:
     metadata:
       labels:
@@ -83,23 +83,21 @@ spec:
         #  requests:
         #  cpu: 100m
         #  memory: 100Mi
-          env:
-          - name: BOOTSTRAP_SERVERS
-            value: kafka:29092 
+          env:          
           - name: SAP_RFC_DESTINATION
-            value: AS_ABAP
+            value: "AS_ABAP"
           - name: JCO_ASHOST
-            value: 10.0.64.13
+            value: "10.0.64.13"
           - name: JCO_SYSNR
-            value: 01
+            value: "01"
           - name: JCO_CLIENT
-            value: 220
+            value: "220"
           - name: JCO_USER
-            value: amusa
+            value: "amusa"
           - name: JCO_PASSWD
-            value: jfoxuser          
+            value: "jfoxuser"          
           ports:
-          - containerPort: 8090
+          - containerPort: "8090"
 
 ---
 apiVersion: extensions/v1beta1
@@ -108,7 +106,7 @@ metadata:
   name: creditnote
   namespace: comd
 spec:  
-  replicas: 1
+  replicas: "1"
   template:
     metadata:
       labels:
@@ -124,27 +122,25 @@ spec:
         #  requests:
         #  cpu: 100m
         #  memory: 100Mi
-          env:
-          - name: BOOTSTRAP_SERVERS
-            value: kafka:29092 
+          env:          
           - name: SAP_RFC_DESTINATION
-            value: AS_ABAP
+            value: "AS_ABAP"
           - name: JCO_ASHOST
-            value: 10.0.64.13
+            value: "10.0.64.13"
           - name: JCO_SYSNR
-            value: 01
+            value: "01"
           - name: JCO_CLIENT
-            value: 220
+            value: "220"
           - name: JCO_USER
-            value: amusa
+            value: "amusa"
           - name: JCO_PASSWD
-            value: jfoxuser  
+            value: "jfoxuser "" 
           - name: mongodb.url
-            value: mongodb://mongo_db
+            value: "mongodb://mongo-db"
           - name: mongodb.db
-            value: sequence            
+            value: "sequence"            
           ports:
-          - containerPort: 8085
+          - containerPort: "8085"
           
 ---
 apiVersion: extensions/v1beta1
@@ -153,7 +149,7 @@ metadata:
   name: customers
   namespace: comd
 spec:  
-  replicas: 1
+  replicas: ""1
   template:
     metadata:
       labels:
@@ -169,23 +165,21 @@ spec:
         #  requests:
         #  cpu: 100m
         #  memory: 100Mi
-          env:
-          - name: BOOTSTRAP_SERVERS
-            value: kafka:29092 
+          env:          
           - name: SAP_RFC_DESTINATION
-            value: AS_ABAP
+            value: "AS_ABAP"
           - name: JCO_ASHOST
-            value: 10.0.64.13
+            value: "10.0.64.13"
           - name: JCO_SYSNR
-            value: 01
+            value: "01"
           - name: JCO_CLIENT
-            value: 220
+            value: "220"
           - name: JCO_USER
-            value: amusa
+            value: "amusa"
           - name: JCO_PASSWD
-            value: jfoxuser                       
+            value: "jfoxuser"                      
           ports:
-          - containerPort: 9090
+          - containerPort: "9090"
           
 ---
 apiVersion: extensions/v1beta1
@@ -210,16 +204,14 @@ spec:
         #  requests:
         #  cpu: 100m
         #  memory: 100Mi
-          env:
-          - name: BOOTSTRAP_SERVERS
-            value: kafka:29092 
+          env:          
           - name: DELIVERY_SERVICE_URL
-            value: http://delivery:8090/comd-delivery-api/v1
+            value: "http://delivery:8090/comd-delivery-api/v1"
           - name: CUSTOMER_SERVICE_URL
-            value: http://customers:9090/comd-customer-api/v1
+            value: "http://customers:9090/comd-customer-api/v1"
           - name: CREDITNOTE_SERVICE_URL
-            value: http://creditnote:8085/comd-creditnote-api/v1
+            value: "http://creditnote:8085/comd-creditnote-api/v1"
                              
           ports:
-          - containerPort: 8180
+          - containerPort: "8180"
          
