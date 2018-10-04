@@ -86,10 +86,6 @@ spec:
         - name: delivery
           image: comd/delivery:latest
           imagePullPolicy: IfNotPresent
-        #resources:
-        #  requests:
-        #  cpu: 100m
-        #  memory: 100Mi
           env:          
           - name: SAP_RFC_DESTINATION
             value: "AS_ABAP"

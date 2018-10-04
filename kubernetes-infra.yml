@@ -23,6 +23,21 @@ spec:
   type: NodePort
   
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-db
+  namespace: comd
+spec:
+  #type: NodePort
+  ports:
+  - name: http
+    port: 27017
+    targetPort: 27017
+  selector:
+    app: mongo-db
+    
+---
 
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -96,7 +111,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mongo-db
+  name: mongo-deployment
   namespace: comd
 spec:
   replicas: 1
@@ -105,7 +120,7 @@ spec:
       labels:
         name: mongo-db
     spec:   
-      hostname: mongo-db    
+      #hostname: mongo-db    
       containers:
       - name: mongo-db
         image: mongo:latest                  
