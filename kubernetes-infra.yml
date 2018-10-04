@@ -35,7 +35,8 @@ spec:
     metadata:
       labels:
         name: keycloak
-    spec:      
+    spec:  
+      hostname: keycloak   
       containers:
       - name: keycloak
         image: jboss/keycloak
@@ -71,7 +72,8 @@ spec:
     metadata:
       labels:
         name: postgres
-    spec:      
+    spec:    
+      hostname: postgres   
       containers:
       - name: postgres
         image: postgres
@@ -102,7 +104,8 @@ spec:
     metadata:
       labels:
         name: mongo-db
-    spec:      
+    spec:   
+      hostname: mongo-db    
       containers:
       - name: mongo-db
         image: mongo:latest                  
@@ -111,6 +114,8 @@ spec:
             name: mongodbdata  
           - mountPath: /data/configdb
             name: mongodbconfig 
+        ports:
+          - containerPort: 27017
       volumes:
         - name: mongodbdata
           hostPath:
@@ -118,3 +123,6 @@ spec:
         - name: mongodbconfig
           hostPath:
             path: /root/configdb
+      
+            
+            

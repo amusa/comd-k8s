@@ -4,9 +4,12 @@ metadata:
   name: delivery
   namespace: comd
 spec:
+  type: NodePort
   ports:
-  - port: 8090
-  clusterIP: None
+  - name: http
+    port: 8090
+    targetPort: 8090
+    nodePort: 30190
   selector:
     app: delivery
   
@@ -18,9 +21,12 @@ metadata:
   name: creditnote
   namespace: comd
 spec:
+  type: NodePort
   ports:
-  - port: 8085
-  clusterIP: None
+  - name: http
+    port: 8085
+    targetPort: 8085
+    nodePort: 30085
   selector:
     app: creditnote
   
@@ -32,9 +38,13 @@ metadata:
   name: customers
   namespace: comd
 spec:
+  type: NodePort
   ports:
-  - port: 9090
-  clusterIP: None
+  - name: http
+    port: 9090
+    targetPort: 9090
+    nodePort: 30090
+  
   selector:
     app: customers
   
@@ -45,12 +55,16 @@ kind: Service
 metadata:
   name: webapp
   namespace: comd
-spec:
-  ports:
-  - port: 8180
-  clusterIP: None
+spec:  
   selector:
     app: webapp
+  type: NodePort
+  ports:
+  - name: http
+    port: 8180
+    targetPort: 8180
+    nodePort: 30180
+  
   
 ---
 
@@ -127,7 +141,7 @@ spec:
           - name: JCO_USER
             value: "amusa"
           - name: JCO_PASSWD
-            value: "jfoxuser "" 
+            value: "jfoxuser" 
           - name: mongodb.url
             value: "mongodb://mongo-db"
           - name: mongodb.db
@@ -193,10 +207,6 @@ spec:
         - name: webapp
           image: comd/creditnote-web:latest
           imagePullPolicy: IfNotPresent
-        #resources:
-        #  requests:
-        #  cpu: 100m
-        #  memory: 100Mi
           env:          
           - name: DELIVERY_SERVICE_URL
             value: "http://delivery:8090/comd-delivery-api/v1"
