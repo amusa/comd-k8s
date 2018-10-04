@@ -1,0 +1,225 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: comd
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: delivery
+  namespace: comd
+spec:
+  ports:
+  - port: 8090
+  clusterIP: None
+  selector:
+    app: delivery
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditnote
+  namespace: comd
+spec:
+  ports:
+  - port: 8085
+  clusterIP: None
+  selector:
+    app: creditnote
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: customers
+  namespace: comd
+spec:
+  ports:
+  - port: 9090
+  clusterIP: None
+  selector:
+    app: customers
+  
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+  namespace: comd
+spec:
+  ports:
+  - port: 8180
+  clusterIP: None
+  selector:
+    app: webapp
+  
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: delivery
+  namespace: comd
+spec:  
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: delivery
+        tier: backend
+    spec:
+      hostname: delivery
+      containers:
+        - name: delivery
+          image: comd/delivery:latest
+          imagePullPolicy: IfNotPresent
+        #resources:
+        #  requests:
+        #  cpu: 100m
+        #  memory: 100Mi
+          env:
+          - name: BOOTSTRAP_SERVERS
+            value: kafka:29092 
+          - name: SAP_RFC_DESTINATION
+            value: AS_ABAP
+          - name: JCO_ASHOST
+            value: 10.0.64.13
+          - name: JCO_SYSNR
+            value: 01
+          - name: JCO_CLIENT
+            value: 220
+          - name: JCO_USER
+            value: amusa
+          - name: JCO_PASSWD
+            value: jfoxuser          
+          ports:
+          - containerPort: 8090
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: creditnote
+  namespace: comd
+spec:  
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: creditnote
+        tier: backend
+    spec:
+      hostname: creditnote
+      containers:
+        - name: creditnote
+          image: comd/creditnote:latest
+          imagePullPolicy: IfNotPresent
+        #resources:
+        #  requests:
+        #  cpu: 100m
+        #  memory: 100Mi
+          env:
+          - name: BOOTSTRAP_SERVERS
+            value: kafka:29092 
+          - name: SAP_RFC_DESTINATION
+            value: AS_ABAP
+          - name: JCO_ASHOST
+            value: 10.0.64.13
+          - name: JCO_SYSNR
+            value: 01
+          - name: JCO_CLIENT
+            value: 220
+          - name: JCO_USER
+            value: amusa
+          - name: JCO_PASSWD
+            value: jfoxuser  
+          - name: mongodb.url
+            value: mongodb://mongo_db
+          - name: mongodb.db
+            value: sequence            
+          ports:
+          - containerPort: 8085
+          
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: customers
+  namespace: comd
+spec:  
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: customers
+        tier: backend
+    spec:
+      hostname: customers
+      containers:
+        - name: customers
+          image: comd/customers:latest
+          imagePullPolicy: IfNotPresent
+        #resources:
+        #  requests:
+        #  cpu: 100m
+        #  memory: 100Mi
+          env:
+          - name: BOOTSTRAP_SERVERS
+            value: kafka:29092 
+          - name: SAP_RFC_DESTINATION
+            value: AS_ABAP
+          - name: JCO_ASHOST
+            value: 10.0.64.13
+          - name: JCO_SYSNR
+            value: 01
+          - name: JCO_CLIENT
+            value: 220
+          - name: JCO_USER
+            value: amusa
+          - name: JCO_PASSWD
+            value: jfoxuser                       
+          ports:
+          - containerPort: 9090
+          
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: webapp
+  namespace: comd
+spec:  
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webapp
+        tier: frontend
+    spec:
+      hostname: webapp
+      containers:
+        - name: webapp
+          image: comd/creditnote-web:latest
+          imagePullPolicy: IfNotPresent
+        #resources:
+        #  requests:
+        #  cpu: 100m
+        #  memory: 100Mi
+          env:
+          - name: BOOTSTRAP_SERVERS
+            value: kafka:29092 
+          - name: DELIVERY_SERVICE_URL
+            value: http://delivery:8090/comd-delivery-api/v1
+          - name: CUSTOMER_SERVICE_URL
+            value: http://customers:9090/comd-customer-api/v1
+          - name: CREDITNOTE_SERVICE_URL
+            value: http://creditnote:8085/comd-creditnote-api/v1
+                             
+          ports:
+          - containerPort: 8180
+         

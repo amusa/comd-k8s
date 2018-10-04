@@ -1,0 +1,112 @@
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  labels:
+    name: keycloak
+spec:
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    nodePort: 8080  
+  selector:
+    name: keycloak
+  type: NodePort
+  
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: keycloak
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: keycloak
+    spec:      
+      containers:
+      - name: keycloak
+        image: jboss/keycloak
+        env:
+        - name: POSTGRES_DB
+		  value: keycloak          
+        - name: DB_USER
+          value: keycloak
+        - name: DB_PASSWORD
+          value: password
+		- name: KEYCLOAK_USER
+		  value: admin
+		- name: KEYCLOAK_PASSWORD
+		  value: Pa55w0rd
+        ports:
+          - name: http
+            containerPort: 8080          
+      volumes:
+        - name: keycloakdata
+          hostPath:
+            path: /root/keycloakdata
+			
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: postgres
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: postgres
+    spec:      
+      containers:
+      - name: postgres
+        image: postgres
+        env:
+        - name: POSTGRES_DB
+          value: keycloak
+        - name: POSTGRES_USER
+		  value: keycloak
+		- name: POSTGRES_PASSWORD
+		  value: password          
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgresdata        
+      volumes:
+        - name: postgresdata
+          hostPath:
+            path: /root/postgresdata
+			
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mongo_db
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: mongo_db
+    spec:      
+      containers:
+      - name: mongo_db
+        image: mongo:latest                  
+        volumeMounts:
+          - mountPath: /data/db
+            name: mongodbdata  
+          - mountPath: /data/configdb
+            name: mongodbconfig 			
+      volumes:
+        - name: mongodbdata
+          hostPath:
+            path: /root/db
+	    - name: mongodbconfig
+          hostPath:
+            path: /root/configdb
