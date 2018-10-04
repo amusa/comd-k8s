@@ -1,11 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: comd
-
----
-
-apiVersion: v1
 kind: Service
 metadata:
   name: delivery
@@ -67,7 +60,7 @@ metadata:
   name: delivery
   namespace: comd
 spec:  
-  replicas: "1"
+  replicas: 1
   template:
     metadata:
       labels:
@@ -97,7 +90,7 @@ spec:
           - name: JCO_PASSWD
             value: "jfoxuser"          
           ports:
-          - containerPort: "8090"
+          - containerPort: 8090
 
 ---
 apiVersion: extensions/v1beta1
@@ -106,7 +99,7 @@ metadata:
   name: creditnote
   namespace: comd
 spec:  
-  replicas: "1"
+  replicas: 1
   template:
     metadata:
       labels:
@@ -140,7 +133,7 @@ spec:
           - name: mongodb.db
             value: "sequence"            
           ports:
-          - containerPort: "8085"
+          - containerPort: 8085
           
 ---
 apiVersion: extensions/v1beta1
@@ -149,7 +142,7 @@ metadata:
   name: customers
   namespace: comd
 spec:  
-  replicas: ""1
+  replicas: 1
   template:
     metadata:
       labels:
@@ -179,7 +172,7 @@ spec:
           - name: JCO_PASSWD
             value: "jfoxuser"                      
           ports:
-          - containerPort: "9090"
+          - containerPort: 9090
           
 ---
 apiVersion: extensions/v1beta1
@@ -213,5 +206,5 @@ spec:
             value: "http://creditnote:8085/comd-creditnote-api/v1"
                              
           ports:
-          - containerPort: "8180"
+          - containerPort: 8180
          

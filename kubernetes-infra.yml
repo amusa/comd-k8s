@@ -1,9 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: comd
+
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
   name: keycloak
+  namespace: comd
   labels:
     name: keycloak
 spec:
@@ -11,7 +17,7 @@ spec:
   - name: http
     port: 8080
     targetPort: 8080
-    nodePort: 8080  
+    nodePort: 30080  
   selector:
     name: keycloak
   type: NodePort
@@ -22,6 +28,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: keycloak
+  namespace: comd
 spec:
   replicas: 1
   template:
@@ -57,6 +64,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: postgres
+  namespace: comd
 spec:
   replicas: 1
   template:
@@ -86,16 +94,17 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: mongo_db
+  name: mongo-db
+  namespace: comd
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        name: mongo_db
+        name: mongo-db
     spec:      
       containers:
-      - name: mongo_db
+      - name: mongo-db
         image: mongo:latest                  
         volumeMounts:
           - mountPath: /data/db
