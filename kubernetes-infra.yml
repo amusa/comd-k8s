@@ -29,11 +29,12 @@ metadata:
   name: mongo-db
   namespace: comd
 spec:
-  #type: NodePort
+  type: NodePort
   ports:
-  - name: http
+  - name: mongoport
     port: 27017
     targetPort: 27017
+    nodePort: 30017
   selector:
     app: mongo-db
     
@@ -120,9 +121,9 @@ spec:
       labels:
         name: mongo-db
     spec:   
-      #hostname: mongo-db    
+      hostname: mongo-db    
       containers:
-      - name: mongo-db
+      - name: mongo-db.comd
         image: mongo:latest                  
         volumeMounts:
           - mountPath: /data/db

@@ -81,7 +81,7 @@ spec:
         app: delivery
         tier: backend
     spec:
-      hostname: delivery
+      #hostname: delivery
       containers:
         - name: delivery
           image: comd/delivery:latest
